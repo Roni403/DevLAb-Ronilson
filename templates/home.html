@@ -49,7 +49,26 @@
         .projects ul, .users ul { list-style: none; padding: 0; }
         .projects li, .users li { background: rgba(0,0,0,0.4); padding: 12px 15px; margin-bottom: 10px; border-left: 4px solid #2008f6ff; border-radius: 4px; }
         h2, h3 { color: white; margin-bottom: 10px; }
-        footer { background-color: transparent; color: white; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+
+        /* BLOCO DE PERFIL */
+        .perfil-box {
+            background: rgba(0,0,0,0.45);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+
+        footer {
+            background-color: transparent;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -70,6 +89,19 @@
 
     <main>
         <h2>Painel Inicial</h2>
+
+        <!-- 🔥 BLOCO QUE MOSTRA O PERFIL DO USUÁRIO 🔥 -->
+        <div class="perfil-box">
+            {% if user.tipo == "coordenador" %}
+                Você está logado como <strong>COORDENADOR</strong>.
+            {% elif user.tipo == "professor" %}
+                Você está logado como <strong>PROFESSOR</strong>.
+            {% elif user.tipo == "estudante" %}
+                Você está logado como <strong>ALUNO</strong>.
+            {% else %}
+                Perfil desconhecido.
+            {% endif %}
+        </div>
 
         <!-- Caixa de busca -->
         <div class="search-box">

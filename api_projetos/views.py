@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions
 from .models import Projeto, ParticipacaoProjeto
@@ -38,7 +38,6 @@ class IsCoordenadorOrProfessor(permissions.BasePermission):
             if request.user.tipo == 'coordenador':
                 return True
             elif request.user.tipo == 'professor':
-                # Professores podem criar e editar projetos/participações
                 if request.method in permissions.SAFE_METHODS:
                     return True
                 return True
@@ -62,3 +61,10 @@ class ParticipacaoProjetoViewSet(viewsets.ModelViewSet):
     queryset = ParticipacaoProjeto.objects.all()
     serializer_class = ParticipacaoProjetoSerializer
     permission_classes = [IsCoordenadorOrProfessor]
+
+# ---------------- Redirecionamento pós-login ----------------
+@login_required
+def redirecionar_usuario(request):
+    if request.user.is_superuser:
+        return redirect('/admin/')
+    return redirect('home')
