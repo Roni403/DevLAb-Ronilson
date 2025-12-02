@@ -12,7 +12,7 @@ class Usuario(AbstractUser):
     curso = models.CharField(max_length=50, blank=True)
     matricula = models.CharField(max_length=20, blank=True)
 
-    # Corrigindo conflitos de reverse accessor
+    
     groups = models.ManyToManyField(
         Group,
         related_name='usuarios_custom',

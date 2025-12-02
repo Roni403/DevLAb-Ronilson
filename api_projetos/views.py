@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions
+from django.contrib.auth import logout
 from .models import Projeto, ParticipacaoProjeto
 from .serializers import ProjetoSerializer, ParticipacaoProjetoSerializer
 from api_usuarios.models import Usuario
 
-# ---------------- Home ----------------
-@login_required
+
+@login_required(login_url='login')
 def home(request):
     """
     Página inicial do sistema, mostra projetos e usuários.
@@ -14,7 +15,7 @@ def home(request):
     projetos = Projeto.objects.all()
     usuarios = Usuario.objects.all()
 
-    # Busca simples
+    
     query = request.GET.get('q')
     if query:
         projetos = projetos.filter(titulo__icontains=query)
@@ -26,7 +27,15 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-# ---------------- Permissão Customizada ----------------
+
+def sair(request):
+    """
+    Faz logout do usuário e redireciona para a página de login.
+    """
+    logout(request)
+    return redirect('login')
+
+
 class IsCoordenadorOrProfessor(permissions.BasePermission):
     """
     Coordenador: pode fazer tudo.
@@ -45,7 +54,7 @@ class IsCoordenadorOrProfessor(permissions.BasePermission):
                 return request.method in permissions.SAFE_METHODS
         return False
 
-# ---------------- ViewSets da API ----------------
+
 class ProjetoViewSet(viewsets.ModelViewSet):
     """
     API de Projetos
@@ -62,8 +71,8 @@ class ParticipacaoProjetoViewSet(viewsets.ModelViewSet):
     serializer_class = ParticipacaoProjetoSerializer
     permission_classes = [IsCoordenadorOrProfessor]
 
-# ---------------- Redirecionamento pós-login ----------------
-@login_required
+
+@login_required(login_url='login')
 def redirecionar_usuario(request):
     if request.user.is_superuser:
         return redirect('/admin/')

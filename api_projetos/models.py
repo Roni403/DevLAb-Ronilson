@@ -15,6 +15,16 @@ class Projeto(models.Model):
     data_fim_prevista = models.DateField(null=True, blank=True)
     participantes = models.ManyToManyField(Usuario, through='ParticipacaoProjeto', related_name='projetos')
 
+    
+    professor_responsavel = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'tipo': 'professor'},
+        related_name='projetos_como_professor'
+    )
+
     def __str__(self):
         return self.titulo
 
