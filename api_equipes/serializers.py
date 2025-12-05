@@ -4,4 +4,10 @@ from .models import Equipe
 class EquipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipe
-        fields = ['id', 'nome']
+        fields = [
+            'id',
+            'nome',
+            'descricao',
+            'projeto',
+            'lider_equipe'
+        ]
