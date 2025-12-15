@@ -7,25 +7,25 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # Home
+    # Home (decide a home pelo tipo do usuário)
     path('', projetos_views.home, name='home'),
 
     # Login e Logout
     path(
         'accounts/login/',
-        auth_views.LoginView.as_view(template_name='registration/login.html'),
+        auth_views.LoginView.as_view(
+            template_name='registration/login.html',
+            redirect_authenticated_user=True
+        ),
         name='login'
     ),
     path(
         'accounts/logout/',
-        projetos_views.sair,  # logout está em views de projetos
+        projetos_views.sair,
         name='logout'
     ),
 
-    # Redirecionamento pós-login
-    path('accounts/redirect/', projetos_views.redirecionar_usuario, name='redirect_user'),
-
-    # Botões flutuantes da home
+    # Botões da home
     path('usuarios/<str:tipo>/', usuarios_views.usuarios_filtrados, name='usuarios_filtrados'),
     path('projetos/lista/', projetos_views.lista_projetos, name='lista_projetos'),
     path('equipes/lista/', projetos_views.lista_equipes, name='lista_equipes'),

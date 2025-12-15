@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Estudante - DevLab</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: url("{% static 'img/fundo.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+        }
+        header {
+            background: rgba(0, 40, 80, 0.85);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        main {
+            background: rgba(0, 0, 0, 0.55);
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        button {
+            background: #1e90ff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0f6fdc;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div><strong>DevLab</strong></div>
+    <div>
+        Olá, {{ user.username }} |
+        <a href="{% url 'logout' %}" style="color:#aee1ff;">Sair</a>
+    </div>
+</header>
+
+<main>
+    <h2>Painel do Estudante</h2>
+    <p>Você está logado como <strong>ALUNO</strong></p>
+
+    <br>
+    <a href="{% url 'lista_projetos' %}">
+        <button>Projetos</button>
+    </a>
+</main>
+
+<footer>
+    © 2025 DevLab - Liana | Daiane | Ronilson
+</footer>
+
+</body>
+</html>

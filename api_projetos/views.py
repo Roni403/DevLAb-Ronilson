@@ -10,8 +10,11 @@ from api_usuarios.models import Usuario
 @login_required(login_url='login')
 def home(request):
     """
-    Página inicial do sistema, mostra projetos e usuários.
+    Página inicial do sistema.
+    Decide qual home renderizar conforme o tipo do usuário.
     """
+    user = request.user
+
     projetos = Projeto.objects.all()
     usuarios = Usuario.objects.all()
 
@@ -22,9 +25,26 @@ def home(request):
 
     context = {
         'projetos': projetos,
-        'usuarios': usuarios
+        'usuarios': usuarios,
     }
-    return render(request, 'home.html', context)
+
+    tipo = (user.tipo or '').strip().lower()
+
+    if tipo in ['estudante', 'aluno']:
+        return render(request, 'home_estudante.html', context)
+
+    elif tipo in ['professor', 'professora']:
+        return render(request, 'home_professor.html', context)
+
+    elif tipo in ['coordenador', 'coordenadora', 'coordenação']:
+        return render(request, 'home_coordenador.html', context)
+
+    # Fallback visível (debug)
+    return render(
+        request,
+        'home.html',
+        {**context, 'erro_tipo': f'Tipo não reconhecido: "{user.tipo}"'}
+    )
 
 
 def sair(request):
@@ -46,8 +66,6 @@ class IsCoordenadorOrProfessor(permissions.BasePermission):
             if request.user.tipo == 'coordenador':
                 return True
             elif request.user.tipo == 'professor':
-                if request.method in permissions.SAFE_METHODS:
-                    return True
                 return True
             elif request.user.tipo == 'estudante':
                 return request.method in permissions.SAFE_METHODS
@@ -61,6 +79,7 @@ class ProjetoViewSet(viewsets.ModelViewSet):
     queryset = Projeto.objects.all()
     serializer_class = ProjetoSerializer
     permission_classes = [IsCoordenadorOrProfessor]
+
 
 class ParticipacaoProjetoViewSet(viewsets.ModelViewSet):
     """

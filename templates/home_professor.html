@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Professor - DevLab</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: url("{% static 'img/fundo.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+        }
+        header {
+            background: rgba(0, 40, 80, 0.85);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        main {
+            background: rgba(0, 0, 0, 0.6);
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            border-radius: 12px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div><strong>DevLab</strong></div>
+    <div>
+        Olá, {{ user.username }} |
+        <a href="{% url 'logout' %}" style="color:#aee1ff;">Sair</a>
+    </div>
+</header>
+
+<main>
+    <h2>Painel do Professor</h2>
+    <p>Você está logado como <strong>PROFESSOR</strong></p>
+
+    <h3>Projetos</h3>
+    <ul>
+        {% for projeto in projetos %}
+            <li>{{ projeto.titulo }} – {{ projeto.status }}</li>
+        {% empty %}
+            <li>Nenhum projeto encontrado.</li>
+        {% endfor %}
+    </ul>
+</main>
+
+<footer>
+    © 2025 DevLab - Liana | Daiane | Ronilson
+</footer>
+
+</body>
+</html>
