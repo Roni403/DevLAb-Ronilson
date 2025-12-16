@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import EditarPerfilForm, CriarUsuarioForm
-from django.contrib.auth.models import User
 from django.db.models import Q
 from .models import Usuario
 
@@ -71,12 +70,11 @@ def criar_usuario(request):
             usuario.set_password(form.cleaned_data['senha'])
             usuario.save()
             messages.success(request, "Usuário criado com sucesso!")
-            return redirect('home_coordenador')
+            return redirect('listar_usuarios')
     else:
         form = CriarUsuarioForm()
 
     return render(request, 'criar_usuario.html', {'form': form})
-
 
 
 @login_required
@@ -97,3 +95,29 @@ def listar_usuarios(request):
         'usuarios': usuarios,
         'query': query
     })
+
+
+@login_required
+def editar_usuario(request, usuario_id):
+    if request.user.tipo != 'coordenador':
+        messages.error(request, "Acesso negado!")
+        return redirect('login')
+
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
+    if request.method == 'POST':
+        form = CriarUsuarioForm(request.POST, instance=usuario)
+        if form.is_valid():
+            usuario = form.save(commit=False)
+            # Se a senha foi preenchida, atualiza
+            senha = form.cleaned_data.get('senha')
+            if senha:
+                usuario.set_password(senha)
+            usuario.save()
+            messages.success(request, "Usuário atualizado com sucesso!")
+            return redirect('listar_usuarios')
+    else:
+        # Preenche o form com os dados existentes
+        form = CriarUsuarioForm(instance=usuario)
+
+    return render(request, 'editar_usuario.html', {'form': form, 'usuario': usuario})

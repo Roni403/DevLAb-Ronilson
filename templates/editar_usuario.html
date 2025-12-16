@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(rgba(0,0,50,0.2), rgba(0,0,50,0.2)), url("{% static 'img/fundo.jpg' %}") no-repeat center center fixed;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        color: #fff;
+    }
+    .btn {
+        margin-right: 8px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .btn-azul { background-color: #007bff; color: #fff; }
+    .btn-cinza { background-color: #6c757d; color: #fff; }
+    .form-container {
+        background-color: rgba(0,0,0,0.5);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        margin: 40px auto;
+    }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-top: 5px; }
+</style>
+
+<h1>Editar Usuário: {{ usuario.username }}</h1>
+
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-azul">Salvar Alterações</button>
+        <a href="{% url 'listar_usuarios' %}"><button type="button" class="btn btn-cinza">Voltar</button></a>
+    </form>
+</div>
+
+{% endblock %}

@@ -28,6 +28,8 @@ urlpatterns = [
     path('equipes/criar/', equipe_views.criar_equipe, name='criar_equipe'),
     path('equipes/<int:equipe_id>/editar/', equipe_views.editar_equipe, name='editar_equipe'),
     path('usuarios/', usuarios_views.listar_usuarios, name='listar_usuarios'),
+    path('usuarios/<int:usuario_id>/editar/', usuarios_views.editar_usuario, name='editar_usuario'),
+
 
     
    

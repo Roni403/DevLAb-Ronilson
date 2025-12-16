@@ -18,7 +18,9 @@
         font-weight: bold;
     }
     .btn-azul { background-color: #007bff; color: #fff; }
+    .btn-verde { background-color: #28a745; color: #fff; }
     .btn-cinza { background-color: #6c757d; color: #fff; }
+    .btn-laranja { background-color: #fd7e14; color: #fff; }
     table { background-color: rgba(242, 238, 238, 0.5); width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { padding: 10px; text-align: left; }
     th { background-color: rgba(67, 56, 56, 0.7); }
@@ -47,6 +49,7 @@
             <th>Email</th>
             <th>Matrícula</th>
             <th>Tipo</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -56,10 +59,13 @@
             <td>{{ usuario.email }}</td>
             <td>{{ usuario.matricula }}</td>
             <td>{{ usuario.tipo }}</td>
+            <td>
+                <a href="{% url 'editar_usuario' usuario.id %}"><button type="button" class="btn btn-verde">Editar</button></a>
+            </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="4">Nenhum usuário encontrado.</td>
+            <td colspan="5">Nenhum usuário encontrado.</td>
         </tr>
         {% endfor %}
     </tbody>
