@@ -10,11 +10,30 @@ class ProjetoForm(forms.ModelForm):
         label="Estudantes Participantes"
     )
 
+    # Adicionando campos de data
+    data_inicio = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Data de Início"
+    )
+    data_fim = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Data de Fim"
+    )
+
     class Meta:
         model = Projeto
-        fields = ['titulo', 'cliente', 'status', 'professor_responsavel', 'participantes']
+        fields = [
+            'titulo', 
+            'cliente', 
+            'status', 
+            'professor_responsavel', 
+            'participantes',
+            'data_inicio',   # adicionado
+            'data_fim'       # adicionado
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Apenas professores na lista de professor_responsavel
         self.fields['professor_responsavel'].queryset = Usuario.objects.filter(tipo='professor')

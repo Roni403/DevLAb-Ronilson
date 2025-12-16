@@ -5,7 +5,42 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <p>
+        {{ form.titulo.label_tag }}<br>
+        {{ form.titulo }}
+    </p>
+
+    <p>
+        {{ form.cliente.label_tag }}<br>
+        {{ form.cliente }}
+    </p>
+
+    <p>
+        {{ form.status.label_tag }}<br>
+        {{ form.status }}
+    </p>
+
+    <p>
+        {{ form.professor_responsavel.label_tag }}<br>
+        {{ form.professor_responsavel }}
+    </p>
+
+    <p>
+        {{ form.participantes.label_tag }}<br>
+        {{ form.participantes }}
+    </p>
+
+    <p>
+        {{ form.data_inicio.label_tag }}<br>
+        {{ form.data_inicio }}
+    </p>
+
+    <p>
+        {{ form.data_fim.label_tag }}<br>
+        {{ form.data_fim }}
+    </p>
+
     <button type="submit">Criar</button>
 </form>
 
