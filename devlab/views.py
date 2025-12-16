@@ -4,7 +4,7 @@ from api_usuarios.models import Usuario
 from .models import Projeto
 from api_equipes.models import Equipe, ParticipacaoProjeto
 
-# Home coordenador
+
 @login_required
 def home_coordenador(request):
     if request.user.tipo != 'coordenador':
@@ -13,7 +13,7 @@ def home_coordenador(request):
     equipes = Equipe.objects.all()
     return render(request, 'home_coordenador.html', {'projetos': projetos, 'equipes': equipes})
 
-# Home professor
+
 @login_required
 def home_professor(request):
     if request.user.tipo != 'professor':
@@ -22,7 +22,7 @@ def home_professor(request):
     equipes = Equipe.objects.filter(projeto__in=projetos)
     return render(request, 'home_professor.html', {'projetos': projetos, 'equipes': equipes})
 
-# Home estudante
+
 @login_required
 def home_estudante(request):
     if request.user.tipo != 'estudante':
@@ -32,7 +32,7 @@ def home_estudante(request):
     equipes = [p.equipe for p in participacoes if hasattr(p, 'equipe')]
     return render(request, 'home_estudante.html', {'projetos': projetos, 'equipes': equipes})
 
-# Criar projeto
+
 @login_required
 def criar_projeto(request):
     if request.user.tipo != 'coordenador':
@@ -59,7 +59,7 @@ def criar_projeto(request):
     professores = Usuario.objects.filter(tipo='professor')
     return render(request, 'criar_projeto.html', {'professores': professores})
 
-# Detalhe projeto
+
 @login_required
 def detalhe_projeto(request, projeto_id):
     projeto = get_object_or_404(Projeto, id=projeto_id)

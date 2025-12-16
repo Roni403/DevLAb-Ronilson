@@ -2,9 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import EditarPerfilForm
-from django.contrib.auth.models import User
-from .forms import CriarUsuarioForm  # vamos criar esse form
+from .forms import EditarPerfilForm, CriarUsuarioForm
 
 # ----------------------------
 # LOGIN / LOGOUT
@@ -51,7 +49,13 @@ def editar_perfil(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Perfil atualizado com sucesso!")
-            return redirect('home_estudante')
+            # Redireciona conforme tipo de usuário
+            if request.user.tipo == 'coordenador':
+                return redirect('home_coordenador')
+            elif request.user.tipo == 'professor':
+                return redirect('home_professor')
+            else:
+                return redirect('home_estudante')
     else:
         form = EditarPerfilForm(instance=request.user)
 
@@ -77,7 +81,9 @@ def criar_usuario(request):
         if form.is_valid():
             usuario = form.save(commit=False)
             # Salva senha corretamente
-            usuario.set_password(form.cleaned_data['password'])
+            usuario.set_password(form.cleaned_data['senha'])
+            # Salva matrícula
+            usuario.matricula = form.cleaned_data.get('matricula', '')
             usuario.save()
             messages.success(request, "Usuário criado com sucesso!")
             return redirect('home_coordenador')

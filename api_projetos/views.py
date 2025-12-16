@@ -5,9 +5,7 @@ from .forms import ProjetoForm
 from api_usuarios.forms import CriarEquipeForm
 from api_usuarios.models import Usuario
 
-# -----------------------
-# HOME COORDENADOR
-# -----------------------
+
 @login_required
 def home_coordenador(request):
     if request.user.tipo != 'coordenador':
@@ -21,9 +19,7 @@ def home_coordenador(request):
         'equipes': equipes
     })
 
-# -----------------------
-# CRIAR PROJETO
-# -----------------------
+
 @login_required
 def criar_projeto(request):
     if request.user.tipo != 'coordenador':
@@ -39,9 +35,7 @@ def criar_projeto(request):
 
     return render(request, 'criar_projeto.html', {'form': form})
 
-# -----------------------
-# EDITAR PROJETO
-# -----------------------
+
 @login_required
 def editar_projeto(request, pk):
     if request.user.tipo != 'coordenador':
@@ -59,9 +53,7 @@ def editar_projeto(request, pk):
 
     return render(request, 'editar_projeto.html', {'form': form, 'projeto': projeto})
 
-# -----------------------
-# DELETAR PROJETO
-# -----------------------
+
 @login_required
 def deletar_projeto(request, pk):
     if request.user.tipo != 'coordenador':
@@ -71,18 +63,14 @@ def deletar_projeto(request, pk):
     projeto.delete()
     return redirect('home_coordenador')
 
-# -----------------------
-# DETALHE PROJETO
-# -----------------------
+
 @login_required
 def detalhe_projeto(request, pk):
     projeto = get_object_or_404(Projeto, pk=pk)
     equipes = Equipe.objects.filter(projetos=projeto)
     return render(request, 'detalhe_projeto.html', {'projeto': projeto, 'equipes': equipes})
 
-# -----------------------
-# HOME PROFESSOR
-# -----------------------
+
 @login_required
 def home_professor(request):
     if request.user.tipo != 'professor':
@@ -96,9 +84,7 @@ def home_professor(request):
         'equipes': equipes
     })
 
-# -----------------------
-# HOME ESTUDANTE
-# -----------------------
+
 @login_required
 def home_estudante(request):
     if request.user.tipo != 'estudante':
@@ -107,7 +93,7 @@ def home_estudante(request):
     participacoes = ParticipacaoEquipe.objects.filter(usuario=request.user)
     equipes = Equipe.objects.filter(participacaoequipe__in=participacoes).distinct()
     
-    # Corrigido: 'projetos' é o campo correto no modelo Equipe
+    
     projetos = Projeto.objects.filter(id__in=equipes.values_list('projetos__id', flat=True)).distinct()
 
     return render(request, 'home_estudante.html', {
