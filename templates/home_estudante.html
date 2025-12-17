@@ -1,38 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+    body {
+        background-color: #f9f9f9;
+    }
+    .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 5px;
+        text-decoration: none;
+        color: white;
+    }
+    .btn-perfil { background-color: #499feaff; }
+    .btn-voltar { background-color: #17a2b8; }
+    .btn-sair { background-color: #dc3545; }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #6dacecff;
+        color: white;
+    }
+</style>
 
-<!-- MENU DO ESTUDANTE -->
+<h1 style="color: #3590ecff;">Área do Aluno</h1>
+
+<!-- Botões -->
 <div style="margin-bottom: 20px;">
-    <a href="{% url 'editar_perfil' %}">
-        <button style="background-color: #007bff; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-            Editar Perfil
-        </button>
-    </a>
-
-    <a href="{% url 'ver_perfil' %}">
-        <button style="background-color: #17a2b8; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-            Ver Perfil
-        </button>
-    </a>
-
-    <a href="{% url 'login' %}">
-        <button style="background-color: #6c757d; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-            Voltar
-        </button>
-    </a>
-
-    <a href="{% url 'logout' %}">
-        <button style="background-color: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-            Sair
-        </button>
-    </a>
+    <a href="{% url 'editar_perfil' %}" class="btn btn-perfil">Editar Perfil</a>
+    <a href="{% url 'ver_perfil' %}" class="btn btn-perfil">Ver Perfil</a>
+    <a href="{% url 'login' %}" class="btn btn-voltar">Voltar</a>
+    <a href="{% url 'logout' %}" class="btn btn-sair">Sair</a>
 </div>
 
-<h1 style="color: #007bff;">Área do Aluno</h1>
-
-<h2 style="margin-top: 30px;">Projetos que você participa</h2>
-<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-    <tr style="background-color: #f2f2f2;">
+{% comment %} Projetos únicos que o aluno participa {% endcomment %}
+<h2>Projetos que você participa</h2>
+<table>
+    <tr>
         <th>Título</th>
         <th>Cliente</th>
         <th>Status</th>
@@ -43,7 +56,13 @@
         <td>{{ projeto.titulo }}</td>
         <td>{{ projeto.cliente }}</td>
         <td>{{ projeto.status }}</td>
-        <td>{{ projeto.professor_responsavel.username }}</td>
+        <td>
+            {% if projeto.professor_responsavel %}
+                {{ projeto.professor_responsavel.username }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
     </tr>
     {% empty %}
     <tr>
@@ -53,23 +72,30 @@
 </table>
 
 <h2 style="margin-top: 30px;">Equipes que você participa</h2>
-<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-    <tr style="background-color: #f2f2f2;">
+<table>
+    <tr>
         <th>Nome da Equipe</th>
         <th>Projeto</th>
         <th>Líder</th>
+        <th>Membros</th>
     </tr>
     {% for equipe in equipes %}
     <tr>
         <td>{{ equipe.nome }}</td>
         <td>{{ equipe.projeto.titulo }}</td>
         <td>{{ equipe.lider.username }}</td>
+        <td>
+            {% for membro in equipe.participacaoequipe_set.all %}
+                {{ membro.usuario.username }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Nenhum membro
+            {% endfor %}
+        </td>
     </tr>
     {% empty %}
     <tr>
-        <td colspan="3" style="text-align: center;">Você não participa de nenhuma equipe.</td>
+        <td colspan="4" style="text-align: center;">Você não participa de nenhuma equipe.</td>
     </tr>
     {% endfor %}
 </table>
-
 {% endblock %}

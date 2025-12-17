@@ -5,18 +5,18 @@ from django.contrib.auth.decorators import login_required
 from .forms import EditarPerfilForm, CriarUsuarioForm
 from django.db.models import Q
 from .models import Usuario
+from api_projetos.models import Projeto
+from api_equipes.models import Equipe, ParticipacaoEquipe  
 
 
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         usuario = authenticate(request, username=username, password=password)
 
         if usuario:
             login(request, usuario)
-
             if usuario.tipo == 'coordenador':
                 return redirect('home_coordenador')
             elif usuario.tipo == 'professor':
@@ -45,7 +45,12 @@ def editar_perfil(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Perfil atualizado com sucesso!")
-            return redirect('home_estudante')
+            if request.user.tipo == 'coordenador':
+                return redirect('home_coordenador')
+            elif request.user.tipo == 'professor':
+                return redirect('home_professor')
+            else:
+                return redirect('home_estudante')
     else:
         form = EditarPerfilForm(instance=request.user)
 
@@ -91,10 +96,7 @@ def listar_usuarios(request):
     else:
         usuarios = Usuario.objects.all()
 
-    return render(request, 'listar_usuarios.html', {
-        'usuarios': usuarios,
-        'query': query
-    })
+    return render(request, 'listar_usuarios.html', {'usuarios': usuarios, 'query': query})
 
 
 @login_required
@@ -109,7 +111,6 @@ def editar_usuario(request, usuario_id):
         form = CriarUsuarioForm(request.POST, instance=usuario)
         if form.is_valid():
             usuario = form.save(commit=False)
-            # Se a senha foi preenchida, atualiza
             senha = form.cleaned_data.get('senha')
             if senha:
                 usuario.set_password(senha)
@@ -117,7 +118,41 @@ def editar_usuario(request, usuario_id):
             messages.success(request, "Usuário atualizado com sucesso!")
             return redirect('listar_usuarios')
     else:
-        # Preenche o form com os dados existentes
         form = CriarUsuarioForm(instance=usuario)
 
     return render(request, 'editar_usuario.html', {'form': form, 'usuario': usuario})
+
+
+@login_required
+def home_coordenador(request):
+    if request.user.tipo != 'coordenador':
+        messages.error(request, "Acesso negado!")
+        return redirect('login')
+
+    projetos = Projeto.objects.all()
+    equipes = Equipe.objects.all()
+    return render(request, 'home_coordenador.html', {'projetos': projetos, 'equipes': equipes})
+
+
+@login_required
+def home_professor(request):
+    if request.user.tipo != 'professor':
+        messages.error(request, "Acesso negado!")
+        return redirect('login')
+
+    projetos = Projeto.objects.filter(professor_responsavel=request.user)
+    # Equipes vinculadas a esses projetos
+    equipes = Equipe.objects.filter(projeto__in=projetos)
+    return render(request, 'home_professor.html', {'projetos': projetos, 'equipes': equipes})
+
+
+@login_required
+def home_estudante(request):
+    if request.user.tipo != 'estudante':
+        messages.error(request, "Acesso negado!")
+        return redirect('login')
+
+    participacoes = ParticipacaoEquipe.objects.filter(usuario=request.user)
+    equipes = Equipe.objects.filter(id__in=participacoes.values_list('equipe_id', flat=True))
+    projetos = Projeto.objects.filter(equipe__in=equipes).distinct()
+    return render(request, 'home_estudante.html', {'projetos': projetos, 'equipes': equipes})

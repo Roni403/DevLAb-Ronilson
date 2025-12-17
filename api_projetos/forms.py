@@ -10,13 +10,12 @@ class ProjetoForm(forms.ModelForm):
         label="Estudantes Participantes"
     )
 
-    # Adicionando campos de data
     data_inicio = forms.DateField(
         required=True,
         widget=forms.DateInput(attrs={'type': 'date'}),
         label="Data de Início"
     )
-    data_fim = forms.DateField(
+    data_fim = forms.DateField(  
         required=True,
         widget=forms.DateInput(attrs={'type': 'date'}),
         label="Data de Fim"
@@ -25,15 +24,27 @@ class ProjetoForm(forms.ModelForm):
     class Meta:
         model = Projeto
         fields = [
-            'titulo', 
-            'cliente', 
-            'status', 
-            'professor_responsavel', 
+            'titulo',
+            'cliente',
+            'status',
+            'professor_responsavel',
             'participantes',
-            'data_inicio',   # adicionado
-            'data_fim'       # adicionado
+            'data_inicio',
+            'data_fim'  
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['professor_responsavel'].queryset = Usuario.objects.filter(tipo='professor')
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+    
+        instance.data_fim_prevista = self.cleaned_data['data_fim']
+        if commit:
+            instance.save()
+            
+            if self.cleaned_data.get('participantes'):
+                if instance.equipe:
+                    instance.equipe.membros.set(self.cleaned_data['participantes'])
+        return instance

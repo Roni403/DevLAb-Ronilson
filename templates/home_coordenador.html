@@ -1,47 +1,56 @@
 {% extends 'base.html' %}
-{% load static %}
-
 {% block content %}
 <style>
     body {
-        background: linear-gradient(rgba(0,0,50,0.2), rgba(0,0,50,0.2)), url("{% static 'img/fundo.jpg' %}") no-repeat center center fixed;
-        background-size: cover;
+        background-color: #f9f9f9;
         font-family: Arial, sans-serif;
-        color: #fff;
     }
     .btn {
-        margin-right: 8px;
-        padding: 8px 15px;
+        padding: 8px 12px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-weight: bold;
+        margin-right: 5px;
+        text-decoration: none;
+        color: white;
     }
-    .btn-verde { background-color: #28a745; color: #fff; }
-    .btn-azul { background-color: #007bff; color: #fff; }
-    .btn-vermelho { background-color: #dc3545; color: #fff; }
-    .btn-laranja { background-color: #fd7e14; color: #fff; }
-    .btn-cinza { background-color: #6c757d; color: #fff; }
-    table { background-color: rgba(242, 238, 238, 0.5); width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { padding: 10px; text-align: left; }
-    th { background-color: rgba(67, 56, 56, 0.7); }
-    tr:nth-child(even) { background-color: rgba(255,255,255,0.1); }
+    .btn-verde { background-color: #28a745; }
+    .btn-azul { background-color: #007bff; }
+    .btn-vermelho { background-color: #dc3545; }
+    .btn-laranja { background-color: #fd7e14; }
+    .btn-cinza { background-color: #6c757d; }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #6dacecff;
+        color: white;
+    }
 </style>
 
-<h1>Perfil do Coordenador</h1>
+<h1 style="color: #3590ecff;">Área do Coordenador</h1>
 
+<!-- Botões -->
 <div style="margin-bottom: 20px;">
-    <a href="{% url 'ver_perfil' %}"><button class="btn btn-azul">Ver Meu Perfil</button></a>
-    <a href="{% url 'criar_usuario' %}"><button class="btn btn-verde">Criar Usuário</button></a>
-    <a href="{% url 'listar_usuarios' %}"><button class="btn btn-laranja">Todos os Usuários</button></a> <!-- Novo botão -->
-    <a href="{% url 'criar_projeto' %}"><button class="btn btn-laranja">Criar Projeto</button></a>
-    <a href="{% url 'criar_equipe' %}"><button class="btn btn-vermelho">Criar Equipe</button></a>
-    <a href="javascript:history.back()"><button class="btn btn-cinza">Voltar</button></a>
-    <a href="{% url 'logout' %}"><button class="btn btn-cinza">Sair</button></a>
+    <a href="{% url 'ver_perfil' %}" class="btn btn-azul">Ver Meu Perfil</a>
+    <a href="{% url 'criar_usuario' %}" class="btn btn-verde">Criar Usuário</a>
+    <a href="{% url 'listar_usuarios' %}" class="btn btn-laranja">Todos os Usuários</a>
+    <a href="{% url 'criar_projeto' %}" class="btn btn-laranja">Criar Projeto</a>
+    <a href="{% url 'criar_equipe' %}" class="btn btn-vermelho">Criar Equipe</a>
+    <a href="javascript:history.back()" class="btn btn-cinza">Voltar</a>
+    <a href="{% url 'logout' %}" class="btn btn-cinza">Sair</a>
 </div>
 
-<h2>Projetos</h2>
-<table border="1">
+<!-- Projetos -->
+<h2>Todos os Projetos</h2>
+<table>
     <tr>
         <th>Título</th>
         <th>Cliente</th>
@@ -54,22 +63,31 @@
         <td>{{ projeto.titulo }}</td>
         <td>{{ projeto.cliente }}</td>
         <td>{{ projeto.status }}</td>
-        <td>{{ projeto.professor_responsavel.username }}</td>
         <td>
-            <a href="{% url 'detalhe_projeto' projeto.id %}"><button class="btn btn-azul">Ver</button></a>
-            <a href="{% url 'editar_projeto' projeto.id %}"><button class="btn btn-laranja">Editar</button></a>
-            <a href="{% url 'deletar_projeto' projeto.id %}"><button class="btn btn-vermelho">Deletar</button></a>
+            {% if projeto.professor_responsavel %}
+                {{ projeto.professor_responsavel.username }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'detalhe_projeto' projeto.id %}" class="btn btn-azul">Ver</a>
+            <a href="{% url 'editar_projeto' projeto.id %}" class="btn btn-laranja">Editar</a>
+            <a href="{% url 'deletar_projeto' projeto.id %}" class="btn btn-vermelho">Deletar</a>
         </td>
     </tr>
     {% empty %}
-    <tr><td colspan="5">Nenhum projeto cadastrado.</td></tr>
+    <tr>
+        <td colspan="5" style="text-align: center;">Nenhum projeto cadastrado.</td>
+    </tr>
     {% endfor %}
 </table>
 
-<h2>Equipes</h2>
-<table border="1">
+<!-- Equipes -->
+<h2 style="margin-top: 30px;">Todas as Equipes</h2>
+<table>
     <tr>
-        <th>Nome</th>
+        <th>Nome da Equipe</th>
         <th>Projeto</th>
         <th>Líder</th>
         <th>Membros</th>
@@ -88,13 +106,16 @@
             {% endfor %}
         </td>
         <td>
-            <a href="{% url 'detalhe_equipe' equipe.id %}"><button class="btn btn-azul">Ver</button></a>
-            <a href="{% url 'editar_equipe' equipe.id %}"><button class="btn btn-laranja">Editar</button></a>
-            <a href="{% url 'deletar_equipe' equipe.id %}"><button class="btn btn-vermelho">Deletar</button></a>
+            <a href="{% url 'detalhe_equipe' equipe.id %}" class="btn btn-azul">Ver</a>
+            <a href="{% url 'editar_equipe' equipe.id %}" class="btn btn-laranja">Editar</a>
+            <a href="{% url 'deletar_equipe' equipe.id %}" class="btn btn-vermelho">Deletar</a>
         </td>
     </tr>
     {% empty %}
-    <tr><td colspan="5">Nenhuma equipe cadastrada.</td></tr>
+    <tr>
+        <td colspan="5" style="text-align: center;">Nenhuma equipe cadastrada.</td>
+    </tr>
     {% endfor %}
 </table>
+
 {% endblock %}

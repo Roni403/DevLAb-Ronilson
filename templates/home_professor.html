@@ -3,6 +3,7 @@
 <style>
     body {
         background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
     }
     .btn {
         padding: 8px 12px;
@@ -13,9 +14,11 @@
         text-decoration: none;
         color: white;
     }
-    .btn-perfil { background-color: #499feaff; }
-    .btn-voltar { background-color: #17a2b8; }
-    .btn-sair { background-color: #dc3545; }
+    .btn-perfil { background-color: #007bff; }
+    .btn-ver { background-color: #17a2b8; }
+    .btn-laranja { background-color: #fd7e14; }
+    .btn-vermelho { background-color: #dc3545; }
+    .btn-cinza { background-color: #6c757d; }
     table {
         width: 100%;
         border-collapse: collapse;
@@ -32,15 +35,16 @@
     }
 </style>
 
-<h1 style="color: #3590ecff;">Perfil do Professor(a):</h1>
+<h1 style="color: #3590ecff;">Área do Professor(a)</h1>
 
 <!-- Botões -->
 <div style="margin-bottom: 20px;">
     <a href="{% url 'ver_perfil' %}" class="btn btn-perfil">Ver Perfil</a>
-    <a href="{% url 'home_estudante' %}" class="btn btn-voltar">Voltar</a>
-    <a href="{% url 'logout' %}" class="btn btn-sair">Sair</a>
+    <a href="javascript:history.back()" class="btn btn-cinza">Voltar</a>
+    <a href="{% url 'logout' %}" class="btn btn-cinza">Sair</a>
 </div>
 
+<!-- Projetos do professor -->
 <h2>Seus Projetos</h2>
 <table>
     <tr>
@@ -55,7 +59,9 @@
         <td>{{ projeto.cliente }}</td>
         <td>{{ projeto.status }}</td>
         <td>
-            <a href="{% url 'detalhe_projeto' projeto.id %}" class="btn btn-perfil">Ver Detalhes</a>
+            <a href="{% url 'detalhe_projeto' projeto.id %}" class="btn btn-ver">Ver Detalhes</a>
+            <a href="{% url 'editar_projeto' projeto.id %}" class="btn btn-laranja">Editar</a>
+            <a href="{% url 'deletar_projeto' projeto.id %}" class="btn btn-vermelho">Deletar</a>
         </td>
     </tr>
     {% empty %}
@@ -65,13 +71,15 @@
     {% endfor %}
 </table>
 
-<h2>Equipes dos Seus Projetos</h2>
+<!-- Equipes dos projetos do professor -->
+<h2 style="margin-top: 30px;">Equipes dos Seus Projetos</h2>
 <table>
     <tr>
-        <th>Nome</th>
+        <th>Nome da Equipe</th>
         <th>Projeto</th>
         <th>Líder</th>
         <th>Membros</th>
+        <th>Ações</th>
     </tr>
     {% for equipe in equipes %}
     <tr>
@@ -85,9 +93,17 @@
                 Nenhum membro
             {% endfor %}
         </td>
+        <td>
+            <a href="{% url 'detalhe_equipe' equipe.id %}" class="btn btn-ver">Ver</a>
+            <a href="{% url 'editar_equipe' equipe.id %}" class="btn btn-laranja">Editar</a>
+            <a href="{% url 'deletar_equipe' equipe.id %}" class="btn btn-vermelho">Deletar</a>
+        </td>
     </tr>
     {% empty %}
-    <tr><td colspan="4" style="text-align: center;">Nenhuma equipe cadastrada.</td></tr>
+    <tr>
+        <td colspan="5" style="text-align: center;">Nenhuma equipe cadastrada.</td>
+    </tr>
     {% endfor %}
 </table>
+
 {% endblock %}
