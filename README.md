@@ -93,3 +93,9 @@ Instalação e Execução
 1. Clonar o repositório
 git clone https://github.com/Roni403/DevLAb-Ronilson.git
 cd DevLAb-Ronilson
+
+DER
+
+<img width="891" height="781" alt="DER DevLab drawio" src="https://github.com/user-attachments/assets/66c21912-cecf-4fe9-9cae-3bad414077bf" />
+
+
