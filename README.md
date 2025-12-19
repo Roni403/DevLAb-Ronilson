@@ -132,11 +132,25 @@ cd DevLAb-Ronilson
 ## 👨‍💻 Contribuição – Eduardo Neves
 
 ### Alterações realizadas no README
-- Remoção de emojis para padronização visual
-- Substituição de símbolos (→, ↔) por termos textuais
-- Padronização do Markdown (títulos, listas e separadores)
-- Organização e revisão da seção de instalação e execução
+- Padronização visual e textual (remoção de emojis, substituição de símbolos → por termos textuais)
+- Organização das seções de instalação, execução e informações do projeto
+- Revisão geral do Markdown para melhor legibilidade
 
 📅 Dezembro/2025
 
+---
 
+# Projeto DevLAb-Ronilson
+
+Este repositório contém o projeto Django desenvolvido como trabalho para avaliação.
+
+### Informações importantes
+- Servidor de desenvolvimento: http://127.0.0.1:8000/
+- Superusuário criado para acessar o admin: `csantos`
+- Commit de teste incluído para garantir que a entrega seja visível no repositório
+
+### Como rodar o projeto
+1. Ative o ambiente virtual:
+   ```bash
+   source sistem/Scripts/activate   # Git Bash
+   .\sistem\Scripts\Activate.ps1    # PowerShell
