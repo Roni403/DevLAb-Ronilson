@@ -19,13 +19,24 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Líder:</strong> {{ equipe.membros.first.username }}</p>
-                    <p><strong>Membros:</strong>
+
+                    <p><strong>Membros:</strong></p>
+                    <ul>
                         {% for participacao in equipe.participacaoequipe_set.all %}
-                            {{ participacao.usuario.username }}{% if not forloop.last %}, {% endif %}
+                            <li>
+                                {{ participacao.usuario.username }}
+
+                                
+                                <a href="{% url 'remover_aluno_projeto' participacao.id %}"
+                                   class="btn btn-sm btn-danger ms-2"
+                                   onclick="return confirm('Tem certeza que deseja remover este aluno do projeto?');">
+                                    Remover
+                                </a>
+                            </li>
                         {% empty %}
-                            Nenhum membro cadastrado.
+                            <li>Nenhum membro cadastrado.</li>
                         {% endfor %}
-                    </p>
+                    </ul>
                 </div>
             </div>
         {% endfor %}
@@ -33,6 +44,13 @@
         <p>Nenhuma equipe vinculada a este projeto.</p>
     {% endif %}
 
-    <a href="{% url 'home_coordenador' %}" class="btn btn-secondary mt-3">Voltar</a>
+    <a href="{% url 'adicionar_aluno_projeto' projeto.id %}" 
+       class="btn btn-primary mt-3">
+        Adicionar aluno ao projeto
+    </a>
+
+    <a href="{% url 'home_coordenador' %}" class="btn btn-secondary mt-3">
+        Voltar
+    </a>
 </div>
 {% endblock %}
