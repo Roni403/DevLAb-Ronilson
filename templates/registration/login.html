@@ -4,44 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - DevLab</title>
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: url("{% static 'img/fundo.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            color: white;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background: url("{% static 'img/fundo.jpg' %}?v=5") no-repeat center center fixed;
+            background-size: cover;
             position: relative;
             overflow: hidden;
+            color: white;
         }
 
+        /* PARTICULAS LEVES */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity:0.6; }
+            50% { transform: translateY(-20px) scale(1.2); opacity:0.8; }
+            100% { transform: translateY(0) scale(1); opacity:0.6; }
+        }
+
+        /* LOGIN BOX MODERNO */
         .login-box {
-            background: rgba(0,0,0,0.6);
-            padding: 40px;
-            border-radius: 8px;
-            width: 350px;
+            background: rgba(0,0,0,0.35); /* preto clarinho */
+            padding: 50px 40px;
+            border-radius: 20px;
+            width: 360px;
             text-align: center;
+            box-shadow: 0 0 20px rgba(0,255,128,0.6);
+            border: 2px solid rgba(0,255,128,0.7);
             z-index: 10;
+            backdrop-filter: blur(5px);
         }
 
         .login-box h1 {
-            margin-bottom: 30px;
-            color: #4CAF50;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            color: #00FF80;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00FF80;
+        }
+
+        .login-box p {
+            color: #ddd;
+            margin-bottom: 25px;
         }
 
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border-radius: 4px;
+            border-radius: 8px;
             border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 10px #00FF80;
         }
 
         button {
@@ -49,48 +86,41 @@
             padding: 12px;
             margin-top: 10px;
             border: none;
-            border-radius: 4px;
-            background-color: #4CAF50;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #2fcd71ff, #00C0FF);
             color: white;
             font-size: 16px;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         button:hover {
-            background-color: #45a049;
+            transform: scale(1.05);
+            background: linear-gradient(90deg, #00C0FF, #00FF80);
         }
 
         .error {
-            color: #ff6961;
+            color: #FF6B6B;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .messages {
             margin-bottom: 15px;
         }
-
-        /* ===================== */
-        /* ESTRELAS / FLOCOS DE NATAL */
-        /* ===================== */
-        .star {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: red; /* cores podem variar */
-            border-radius: 50%;
-            bottom: -20px;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-500px) rotate(360deg); opacity: 0; }
-        }
     </style>
 </head>
 <body>
+
+    <!-- PARTICULAS -->
+    <div class="particle" style="width:5px; height:5px; background:#00FF80; left:10%; animation-duration:6s;"></div>
+    <div class="particle" style="width:7px; height:7px; background:#00C0FF; left:30%; animation-duration:5s;"></div>
+    <div class="particle" style="width:6px; height:6px; background:#00FF80; left:50%; animation-duration:7s;"></div>
+    <div class="particle" style="width:8px; height:8px; background:#00C0FF; left:70%; animation-duration:6.5s;"></div>
+
     <div class="login-box">
-        <h1>Login DevLab</h1>
+        <h1>DevLab</h1>
+        <p>Sistema de Gestão Escolar</p>
 
         {% if messages %}
             <div class="messages">
@@ -108,14 +138,5 @@
         </form>
     </div>
 
-    <!-- Estrelas de Natal animadas -->
-    <div class="star" style="left: 5%; background-color: red; animation-duration: 6s;"></div>
-    <div class="star" style="left: 15%; background-color: green; animation-duration: 5s;"></div>
-    <div class="star" style="left: 25%; background-color: gold; animation-duration: 7s;"></div>
-    <div class="star" style="left: 35%; background-color: red; animation-duration: 6.5s;"></div>
-    <div class="star" style="left: 45%; background-color: green; animation-duration: 5.5s;"></div>
-    <div class="star" style="left: 55%; background-color: gold; animation-duration: 7.2s;"></div>
-    <div class="star" style="left: 65%; background-color: red; animation-duration: 6.8s;"></div>
-    <div class="star" style="left: 75%; background-color: green; animation-duration: 5.3s;"></div>
 </body>
 </html>

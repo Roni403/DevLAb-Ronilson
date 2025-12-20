@@ -1,105 +1,140 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-
-<!-- Estilo -->
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
     body {
-        background-color: #f9f9f9;
+        background: url("{% static 'img/fundo.jpg' %}?v=5") no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+        margin: 0;
+        padding: 0;
     }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        background-color: rgba(0,0,0,0.65);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        color: #00BFFF;
+        text-shadow: 0 0 10px rgba(0,191,255,0.8);
+        margin-bottom: 25px;
+    }
+
+    /* Botões */
     .btn {
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 5px;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: bold;
         text-decoration: none;
+        display: inline-block;
+        margin: 5px 5px 15px 0;
+        transition: all 0.3s ease;
         color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-    .btn-perfil { background-color: #499feaff; }
-    .btn-voltar { background-color: #17a2b8; }
-    .btn-sair { background-color: #dc3545; }
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    .btn-perfil { background: linear-gradient(135deg,#499feaff,#2176c7);}
+    .btn-voltar { background: linear-gradient(135deg,#17a2b8,#117a8b);}
+    .btn-sair { background: linear-gradient(135deg,#dc3545,#b02a37);}
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+
+    .btn-container { text-align: center; margin-bottom: 25px; }
+
+    /* Cards */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
         margin-top: 15px;
     }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
+
+    .card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        transition: all 0.3s ease;
     }
-    th {
-        background-color: #6dacecff;
-        color: white;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
+
+    .card h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 20px;
+        color: #00FFFF;
+        text-shadow: 0 0 6px rgba(0,255,255,0.6);
+    }
+
+    .card p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
 </style>
 
-<h1 style="color: #3590ecff;">Área do Aluno</h1>
+<div class="container">
+    <h1>Área do Aluno</h1>
 
-<!-- Botões -->
-<div style="margin-bottom: 20px;">
-    <a href="{% url 'editar_perfil' %}" class="btn btn-perfil">Editar Perfil</a>
-    <a href="{% url 'ver_perfil' %}" class="btn btn-perfil">Ver Perfil</a>
-    <a href="{% url 'login' %}" class="btn btn-voltar">Voltar</a>
-    <a href="{% url 'logout' %}" class="btn btn-sair">Sair</a>
-</div>
+    <!-- Botões -->
+    <div class="btn-container">
+        <a href="{% url 'editar_perfil' %}" class="btn btn-perfil">Editar Perfil</a>
+        <a href="{% url 'ver_perfil' %}" class="btn btn-perfil">Ver Perfil</a>
+        <a href="{% url 'login' %}" class="btn btn-voltar">Voltar</a>
+        <a href="{% url 'logout' %}" class="btn btn-sair">Sair</a>
+    </div>
 
-<!-- Projetos que o aluno participa -->
-<h2>Projetos que você participa</h2>
-<table>
-    <tr>
-        <th>Título</th>
-        <th>Cliente</th>
-        <th>Status</th>
-        <th>Professor Responsável</th>
-    </tr>
-    {% for projeto in projetos %}
-        <tr>
-            <td>{{ projeto.titulo }}</td>
-            <td>{{ projeto.cliente }}</td>
-            <td>{{ projeto.status }}</td>
-            <td>
+    <!-- Projetos -->
+    <h2 style="color:#00C0FF;">Projetos que você participa</h2>
+    <div class="card-grid">
+        {% for projeto in projetos %}
+        <div class="card">
+            <h3>{{ projeto.titulo }}</h3>
+            <p><strong>Cliente:</strong> {{ projeto.cliente }}</p>
+            <p><strong>Status:</strong> {{ projeto.status }}</p>
+            <p><strong>Professor Responsável:</strong> 
                 {% if projeto.professor_responsavel %}
                     {{ projeto.professor_responsavel.username }}
                 {% else %}
                     —
                 {% endif %}
-            </td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="4" style="text-align: center;">Você não participa de nenhum projeto.</td>
-        </tr>
-    {% endfor %}
-</table>
+            </p>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">Você não participa de nenhum projeto.</p>
+        {% endfor %}
+    </div>
 
-<!-- Equipes que o aluno participa -->
-<h2 style="margin-top: 30px;">Equipes que você participa</h2>
-<table>
-    <tr>
-        <th>Nome da Equipe</th>
-        <th>Projeto</th>
-        <th>Líder</th>
-        <th>Membros</th>
-    </tr>
-    {% for equipe in equipes %}
-        <tr>
-            <td>{{ equipe.nome }}</td>
-            <td>{{ equipe.projeto.titulo }}</td>
-            <td>{{ equipe.lider.username }}</td>
-            <td>
+    <!-- Equipes -->
+    <h2 style="color:#00C0FF; margin-top: 35px;">Equipes que você participa</h2>
+    <div class="card-grid">
+        {% for equipe in equipes %}
+        <div class="card">
+            <h3>{{ equipe.nome }}</h3>
+            <p><strong>Projeto:</strong> {{ equipe.projeto.titulo }}</p>
+            <p><strong>Líder:</strong> {{ equipe.lider.username }}</p>
+            <p><strong>Membros:</strong> 
                 {% for membro in equipe.participacaoequipe_set.all %}
                     {{ membro.usuario.username }}{% if not forloop.last %}, {% endif %}
                 {% empty %}
                     Nenhum membro
                 {% endfor %}
-            </td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="4" style="text-align: center;">Você não participa de nenhuma equipe.</td>
-        </tr>
-    {% endfor %}
-</table>
-
+            </p>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">Você não participa de nenhuma equipe.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
