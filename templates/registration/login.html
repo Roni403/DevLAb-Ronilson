@@ -3,124 +3,133 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login - DevLab</title>
+    <title>Login | DevLab</title>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url("{% static 'img/fundo.jpg' %}?v=5") no-repeat center center fixed;
+
+            /* IMAGEM DE FUNDO (A SUA) */
+            background: url("{% static 'img/fundo.jpg' %}?v=6") no-repeat center center fixed;
+
             background-size: cover;
+
             position: relative;
             overflow: hidden;
-            color: white;
         }
 
-        /* PARTICULAS LEVES */
+        /* OVERLAY ESCURO PARA DAR CONTRASTE */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 0;
+        }
+
+        /* PARTÍCULAS DISCRETAS */
         .particle {
             position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
             border-radius: 50%;
-            opacity: 0.6;
-            animation: float linear infinite;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
         }
 
         @keyframes float {
-            0% { transform: translateY(0) scale(1); opacity:0.6; }
-            50% { transform: translateY(-20px) scale(1.2); opacity:0.8; }
-            100% { transform: translateY(0) scale(1); opacity:0.6; }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0); }
         }
 
-        /* LOGIN BOX MODERNO */
         .login-box {
-            background: rgba(0,0,0,0.35); /* preto clarinho */
-            padding: 50px 40px;
-            border-radius: 20px;
-            width: 360px;
+            width: 380px;
+            background: rgba(255,255,255,0.95);
+            padding: 45px;
+            border-radius: 14px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             text-align: center;
-            box-shadow: 0 0 20px rgba(0,255,128,0.6);
-            border: 2px solid rgba(0,255,128,0.7);
-            z-index: 10;
-            backdrop-filter: blur(5px);
+            color: #333;
+            z-index: 2;
         }
 
         .login-box h1 {
-            color: #00FF80;
-            font-size: 32px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #00FF80;
+            font-size: 34px;
+            margin-bottom: 8px;
+            color: #203a43;
         }
 
         .login-box p {
-            color: #ddd;
-            margin-bottom: 25px;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 30px;
         }
 
-        input[type="text"], input[type="password"] {
+        input {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 16px;
-            transition: 0.3s;
+            margin-bottom: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
         }
 
-        input[type="text"]:focus, input[type="password"]:focus {
+        input:focus {
             outline: none;
-            background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 10px #00FF80;
+            border-color: #203a43;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            margin-top: 10px;
+            background: #203a43;
             border: none;
-            border-radius: 8px;
-            background: linear-gradient(90deg, #2fcd71ff, #00C0FF);
-            color: white;
+            border-radius: 6px;
+            color: #fff;
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
         }
 
         button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(90deg, #00C0FF, #00FF80);
-        }
-
-        .error {
-            color: #FF6B6B;
-            margin-bottom: 10px;
-            font-weight: bold;
+            background: #0f2027;
         }
 
         .messages {
             margin-bottom: 15px;
         }
+
+        .error {
+            color: #c0392b;
+            font-size: 14px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-    <!-- PARTICULAS -->
-    <div class="particle" style="width:5px; height:5px; background:#00FF80; left:10%; animation-duration:6s;"></div>
-    <div class="particle" style="width:7px; height:7px; background:#00C0FF; left:30%; animation-duration:5s;"></div>
-    <div class="particle" style="width:6px; height:6px; background:#00FF80; left:50%; animation-duration:7s;"></div>
-    <div class="particle" style="width:8px; height:8px; background:#00C0FF; left:70%; animation-duration:6.5s;"></div>
+    <!-- PARTÍCULAS -->
+    <div class="particle" style="top:20%; left:15%;"></div>
+    <div class="particle" style="top:40%; left:80%; animation-duration:7s;"></div>
+    <div class="particle" style="top:70%; left:30%; animation-duration:5s;"></div>
 
     <div class="login-box">
         <h1>DevLab</h1>
-        <p>Sistema de Gestão Escolar</p>
+        <p>Sistema de Gestão de Projetos Educacionais</p>
 
         {% if messages %}
             <div class="messages">
